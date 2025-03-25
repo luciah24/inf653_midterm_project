@@ -1,0 +1,10 @@
+
+SetEnv USERNAME "quotesdb_yv0r_user"
+
+SetEnv PASSWORD "nGtaHiuBLgNcj5aN39YVEkeBSaJzsJH6"
+
+SetEnv DBNAME "quotesdb_yv0r"
+
+SetEnv HOST "dpg-cvaqbdlrie7s73985udg-a.ohio-postgres.render.com"
+
+
