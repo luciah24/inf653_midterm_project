@@ -1,42 +1,56 @@
 <?php
-
-
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    if ($method === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-        header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-        exit();
-    }
-
-
-    include_once '../../config/Database.php';
     
+     header('Access-Control-Allow-Origin: *');
+     header('Content-Type: application/json');
+     $method = $_SERVER['REQUEST_METHOD'];
+ 
+     if ($method === 'OPTIONS')
+     {
+         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+         header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
+         exit();
+     } 
 
-    // Instantiate DB & connect
-    $database = new Database();
-    $pdo = $database->connect(); // Get the database connection
-
-
-
-    // Handle GET request to fetch all authors
-if ($method === 'GET') {
-    try {
-        
-        // Fetch authors from database
-        $query = "SELECT * FROM authors";
-        $stmt = $pdo->query($query);
-        $authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($authors) {
-            echo json_encode($authors);
-        } else {
-            echo json_encode(["message" => "No authors found."]);
+     if ($method === 'GET') 
+     {
+        try {
+            if (isset($_GET['id']))
+                require_once 'read_single.php' ;
+           else
+                require_once 'read.php';
         }
-    } catch (PDOException $e) {
-        echo json_encode(["error" => $e->getMessage()]);
-    }
-}
+        catch(PDOException $e) 
+        {
+            echo("Read_single or read file not found: " . $e->getMessage());
+        }
+     }
+     else if ($method === 'POST') {
+        try {
+            require_once 'create.php';
+        }
+        catch(PDOException $e)  
+        {
+            echo("Create file not found: " . $e->getMessage());
+        }
+     }
+     else if ($method === 'PUT') {
+        try {
+            require_once 'update.php';
+        }
+        catch(PDOException $e)  
+        {
+            echo("Update file not found: " . $e->getMessage());
+        }
+     }
+     else if ($method === 'DELETE') {
+        try {
+            require_once 'delete.php';
+        }
+        catch(PDOException $e)  
+        {
+            echo("Delete file not found: " . $e->getMessage());
+        }
+     }
+     else
+        echo ("No action requested");
 ?>
