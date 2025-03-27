@@ -244,8 +244,7 @@ public function delete()
 {
   // delete query
   $query = 'DELETE FROM ' . $this->table . '
-  WHERE
-   id = :id';
+  WHERE id = :id';
 
   
 
@@ -265,7 +264,7 @@ public function delete()
 
         if ($stmt->execute())
         {
-        return true;
+            return true;
         }
         else
         {
