@@ -30,7 +30,7 @@ if (isset($quote->quote) && isset($quote->author_id) && isset($quote->category_i
 {
     if ($quote->create())
     {
-        $quote_arr = array('id' => $quote_id, 'quote' => $quote->quote, 'author_id' => $quote->author_id, 'category_id' => $quote->category_id);
+        $quote_arr = array('id' => $quote->id, 'quote' => $quote->quote, 'author_id' => $quote->author_id, 'category_id' => $quote->category_id);
 
         print_r(json_encode($quote_arr));
 

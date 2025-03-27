@@ -23,14 +23,13 @@ $category->id = isset($data->id) ? $data->id : null;
 
 if ($category->delete())
 {
-    $category_arr = array('id' => $category->id);
 
-    print_r(json_encode($category_arr));
+    echo json_encode(value: array("message" => "Category Deleted"));
 
 }
 else
 {
 
-    echo json_encode(array("message" => "Category Not Deleted"));
+    echo json_encode(value: array("message" => "Category Not Deleted"));
 
 }

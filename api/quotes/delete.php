@@ -26,9 +26,8 @@ $quote->id = isset($data->id) ? $data->id : null;
 
 if ($quote->delete())
 {
-    $quote_arr = array('id' => $quote->id);
+    echo json_encode(array("message" => "Quote Deleted"));
 
-    print_r(json_encode($quote_arr));
 }
 else
 {
