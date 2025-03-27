@@ -1,42 +1,36 @@
 <?php
 
 // accessing our front-facing API
-// Header notic how the heder names are in capital letters 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: PUT");
 header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With");
-// the above header values all must be on ONE LINE 
 
 
 include_once '../../config/Database.php';
 include_once '../../models/Category.php';
 
 // Instantiate/Create DB and Connect
-$database = new Database(); // new database object
-$db = $database->connect(); // the connect pre-defined function
+$database = new Database(); 
+$db = $database->connect(); 
 
 
-// Instantiate/create new (blog) post object
 $category = new Category($db);
 
 
 
-// Gt the raw posted data 
 $data = json_decode(file_get_contents("php://input"));
 
 
 
-// Set ID to update; again, these are the categories, so to speak, that we are updating
-$category->id = $data->id;
-
-$category->category = $data->category;
+$category->id = isset($data->id) ? $data->id : null;
+$category->category = isset($data->category) ? $data->category : null;
 
 
 if ($category->update())
 {
     // encode to JSON
-    echo json_encode(array("message" => "Category Updated"));
+    echo json_encode(array("id" => $category->id, "category" => $category->category));
 
 }
 else

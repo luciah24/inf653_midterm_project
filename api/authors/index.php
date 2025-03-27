@@ -1,3 +1,4 @@
+
 <?php
     
      header('Access-Control-Allow-Origin: *');
@@ -13,38 +14,44 @@
 
      if ($method === 'GET') 
      {
-        try {
+        try 
+        {
             if (isset($_GET['id']))
-                require_once 'read_single.php' ;
+                include_once 'read_single.php' ;
            else
-                require_once 'read.php';
+                include_once 'read.php';
         }
         catch(PDOException $e) 
         {
             echo("Read_single or read file not found: " . $e->getMessage());
         }
      }
-     else if ($method === 'POST') {
-        try {
-            require_once 'create.php';
+     else if ($method === 'POST') 
+     {
+        try 
+        {
+            include_once 'create.php';
         }
         catch(PDOException $e)  
         {
             echo("Create file not found: " . $e->getMessage());
         }
      }
-     else if ($method === 'PUT') {
+     else if ($method === 'PUT') 
+     {
         try {
-            require_once 'update.php';
+            include_once 'update.php';
         }
         catch(PDOException $e)  
         {
             echo("Update file not found: " . $e->getMessage());
         }
      }
-     else if ($method === 'DELETE') {
-        try {
-            require_once 'delete.php';
+     else if ($method === 'DELETE') 
+     {
+        try 
+        {
+            include_once 'delete.php'; 
         }
         catch(PDOException $e)  
         {
@@ -53,4 +60,4 @@
      }
      else
         echo ("No action requested");
-?>
+

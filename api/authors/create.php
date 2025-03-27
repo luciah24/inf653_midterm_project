@@ -1,41 +1,46 @@
 <?php
 
 // accessing our front-facing API
-// Header notic how the heder names are in capital letters 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With");
-// the above header values all must be on ONE LINE 
 
 
 include_once '../../config/Database.php';
 include_once '../../models/Author.php';
 
 // Instantiate/Create DB and Connect
-$database = new Database(); // new database object
-$db = $database->connect(); // the connect pre-defined function
+$database = new Database(); 
+$db = $database->connect(); 
 
 
-// Instantiate/create new (blog) post object
 $author = new Author($db);
 
 
-// Gt the raw posted data 
 $data = json_decode(file_get_contents("php://input"));
 
 
-$author->author = $data->author;
+$author->author = isset($data->author) ? $data->author : null;
 
+  
 
-if ($author->create())
+if (isset($author->author))
 {
-    // encode to JSON
-    echo json_encode(array("message" => "Author Created"));
 
+    // Create array  
+    if ($author->create())
+    {
+        $author_arr = array('id'=> $author->id, 'author'=> $author->author); 
+
+        print_r(json_encode($author_arr));
+    }
+    
 }
 else
 {
-
     echo json_encode(array("message" => "Author Not Created"));
+
 }
+
+

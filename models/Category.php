@@ -4,15 +4,17 @@
 
 class Category
 {
-// DB stuff
+// DB
 private $conn;
 private $table = 'categories'; 
+
+// properties
 public $id;
 public $category;  
 
 
-//Constructor with DB
-public function __construct($db) // that's 2 underscores for the standard construct function 
+// Constructor with DB
+public function __construct($db)  
 {
 
     $this->conn = $db;
@@ -23,10 +25,11 @@ public function __construct($db) // that's 2 underscores for the standard constr
 public function read()
 {
   
-  $query = "SELECT 
+  $query = 'SELECT 
    id,
    category
-  FROM " . $this->table; // query has been created 
+  FROM ' . $this->table . 
+  ' ORDER BY id ASC'; 
 
 
 
@@ -36,22 +39,11 @@ public function read()
     try 
     {
 
+        $stmt = $this->conn->prepare($query);
+ 
+        $stmt->execute();
         
-    // Prepare Statement by connecting to the query 
-    // create a $stmt member variable and use the prepare pre-defined/built-in function 
-    
-
-    // $stmt statement goes here
-
-    $stmt = $this->conn->prepare($query);
-
-
-    // Execute query via the execute pre-defined/built-in function 
-    // need the execute pre-defined function to execute the query 
-    $stmt->execute();
-    
-
-    return $stmt;
+        return $stmt;
 
     
 
@@ -59,9 +51,7 @@ public function read()
     catch(PDOException $e)
     {
 
-        // json converted error message goes here; "in JSON"
-        echo json_encode(array("error" => "SQL error found", "message" => $e->getMessage()));
-
+        echo json_encode(array('error' => 'SQL error found', 'message' => $e->getMessage()));
 
         // to indicate failure 
         return null;
@@ -76,12 +66,12 @@ public function read()
 public function read_single()
 {
 
-  $query = "SELECT  
+  $query = 'SELECT  
   id,
   category
-  FROM " . $this->table . "
+  FROM ' . $this->table . '
   WHERE id = ?
-  LIMIT 1"; // want to retrive 1 record
+  LIMIT 1'; // want to retrive 1 record
 
 
 
@@ -91,50 +81,39 @@ public function read_single()
     try 
     {
 
-        
-    // Prepare Statement by connecting to the query 
-    // create a $stmt member variable and use the prepare pre-defined/built-in function 
-    
-
-    // $stmt statement goes here
-
-    $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($query);
 
 
-    
-    // Bind ID via the bindParam pre-defined function
-    $stmt->bindParam(1, $this->id);
+        // Bind Params
+        $stmt->bindParam(1, $this->id);
 
 
-    // need the execute pre-defined function to execute the query 
-    $stmt->execute();
+        $stmt->execute();
 
 
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row) 
-    {
-        // Set properties only if a row is found
-        $this->id = $row['id'];
-        $this->category = $row['category'];
+        if ($row) 
+        {
+            // Set properties only if a row is found
+            $this->id = $row['id'];
+            $this->category = $row['category'];
 
-        return true;
-    } 
-    else 
-    {
-        // if there is no record found, return false
-        return false;
-    }
+            return true;
+        } 
+        else 
+        {
+            // if there is no record found, return false
+            return false;
+        }
 
-    
     
 
     }
     catch(PDOException $e)
     {
 
-        // json converted error message goes here; "in JSON"
-        echo json_encode(array("error" => "SQL error found", "message" => $e->getMessage()));
+        echo json_encode(array('error' => 'SQL error found', 'message' => $e->getMessage()));
 
 
         // to indicate failure 
@@ -151,13 +130,9 @@ public function read_single()
 public function create() 
 {
 
-    $query = "INSERT INTO " . $this->table . " 
+    $query = 'INSERT INTO ' . $this->table . ' 
     (category) 
-    VALUES (:category)"; // do not need to insert id since the database will automatically 
-    // insert or handle the id for us 
-
-
-
+    VALUES (:category)'; 
   
     // prepare and execute by way of a try-catch block 
     try 
@@ -166,9 +141,7 @@ public function create()
         $stmt = $this->conn->prepare($query);
 
 
-        // Clean data by wrapping them in security functions because we do not want 
-        // threats of any kind
-        // also, we do not want tags which is why we are also using the strip_tags function
+        // Clean Data 
         $this->category = htmlspecialchars(strip_tags($this->category));
     
         // Bind Params
@@ -180,22 +153,22 @@ public function create()
         {
         return true;
         }
-        
+        else
+        {
+            // Print error if something goes wrong
+            printf('Error: %s.\n', $stmt->error); // via the pre-defined error member variable
+                
+            return false; 
+
+        }
     
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error); // via the pre-defined error member variable
-    
-    
-        return false; 
-    
+       
 
     }
     catch(PDOException $e)
     {
 
-        // json converted error message goes here; "in JSON"
-        echo json_encode(array("error" => "SQL error found", "message" => $e->getMessage()));
-
+        echo json_encode(array('error' => 'SQL error found', 'message' => $e->getMessage()));
 
         // to indicate failure 
         return null;   
@@ -211,11 +184,11 @@ public function create()
 public function update() 
 {
 
-  $query = "UPDATE " . $this->table . "
+  $query = 'UPDATE ' . $this->table . '
     SET
       category = :category
     WHERE
-      id = :id";
+      id = :id';
 
 
 
@@ -226,12 +199,12 @@ public function update()
         $stmt = $this->conn->prepare($query);
 
 
-        // Clean data by wrapping them in security functions because we do not want 
-        // threats of any kind
-        // also, we do not want tags which is why we are also using the strip_tags function
+        // Clean Data
+        $this->id = htmlspecialchars(strip_tags($this->id));
         $this->category = htmlspecialchars(strip_tags($this->category));
 
         // Bind Params
+        $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':category', $this->category);
 
 
@@ -239,23 +212,24 @@ public function update()
         {
         return true;
         }
+        else
+        {
+
+            // Print error if something goes wrong
+            printf('Error: %s.\n', $stmt->error); 
+
+            return false; 
+
+        }
         
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error); // via the pre-defined error member variable
-
-
-        return false; 
-
-
+     
 
     }
     catch(PDOException $e)
     {
 
-        // json converted error message goes here; "in JSON"
-        echo json_encode(array("error" => "SQL error found", "message" => $e->getMessage()));
-
+        echo json_encode(array('error' => 'SQL error found', 'message' => $e->getMessage()));
 
         // to indicate failure 
         return null;   
@@ -269,9 +243,9 @@ public function update()
 public function delete()
 {
   // delete query
-  $query = "DELETE FROM " . $this->table . "
+  $query = 'DELETE FROM ' . $this->table . '
   WHERE
-   id = :id";
+   id = :id';
 
   
 
@@ -279,14 +253,13 @@ public function delete()
     try 
     {
 
-
         $stmt = $this->conn->prepare($query);
 
-        // Clean data 
+        // Clean Data 
         $this->id = htmlspecialchars(strip_tags($this->id));
 
 
-        // Bind data
+        // Bind Params
         $stmt->bindParam(':id', $this->id);
 
 
@@ -294,21 +267,23 @@ public function delete()
         {
         return true;
         }
+        else
+        {
+
+            // Print error if something goes wrong
+            printf('Error: %s.\n', $stmt->error); 
+
+            return false; 
+
+        }
         
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error); // via the pre-defined error member variable
-
-
-        return false; 
+   
 
     }
     catch(PDOException $e)
     {
-
-        // json converted error message goes here; "in JSON"
-        echo json_encode(array("error" => "SQL error found", "message" => $e->getMessage()));
-
+        echo json_encode(array('error' => 'SQL error found', 'message' => $e->getMessage()));
 
         // to indicate failure 
         return null;   
