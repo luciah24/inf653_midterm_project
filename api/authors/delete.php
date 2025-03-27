@@ -32,14 +32,15 @@ if (isset($author->id))
         
     if ($author->delete())
     {
-        // encode to JSON
-        echo json_encode(value: array("message" => "Author Deleted"));
+
+        $author_arr = array('id' => $author->id);
+
+        print_r(json_encode($author_arr));
+    }
+    else
+    {
+        echo json_encode(array('message' => 'Author Not Deleted'));
     }
     
 }
-else
-{
 
-    echo json_encode(value: array("message" => "Author Not Deleted"));
-
-}

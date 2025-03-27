@@ -29,12 +29,14 @@ $category->category = isset($data->category) ? $data->category : null;
 
 if ($category->update())
 {
-    echo json_encode(array("message" => "Category Updated"));
+    $category_arr = array('id' => $category->id, 'category' => $category->category);
 
+    print_r(json_encode($category_arr));
 
 }
 else
 {
+   
+    echo json_encode(array('message' => 'Missing Required Parameters'));  
 
-    echo json_encode(array("message" => "Category Not Updated"));
 }

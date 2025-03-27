@@ -39,7 +39,8 @@ if (isset($author->author))
 }
 else
 {
-    echo json_encode(array("message" => "Author Not Created"));
+   
+    echo json_encode(array('message' => 'Missing Required Parameters'));  
 
 }
 

@@ -29,16 +29,32 @@ $quote->category_id = $data->category_id;
 
 
  
-if ($quote->update())
+if (isset($quote->quote) && isset($quote->author_id) && isset($quote->category_id))
 {
+    if ($quote->update())
+    {
+        $quote_arr = array('id' => $quote->id, 'quote' => $quote->quote, 'author_id' => $quote->author_id, 'category_id' => $quote->category_id);
 
-    $quote_arr = array('id' => $quote->id, 'quote' => $quote->quote, 'author_id' => $quote->author_id, 'category_id' => $quote->category_id);
+        print_r(json_encode($quote_arr));
 
-    print_r(json_encode($quote_arr));
+    }
+    else
+    {
 
+        echo json_encode(array("message" => "No Quotes Found"));
+    }
+
+}
+else if (!isset($quote->author_id) && isset($quote->category_id))
+{
+    echo json_encode( array('message' => 'author_id Not Found')); 
+
+}
+else if (isset($quote->author_id) && !isset($quote->category_id)) 
+{
+    echo json_encode(array('message' => 'category_id Not Found')); 
 }
 else
 {
-
-    echo json_encode(array("message" => "Quote Not Updated"));
+    echo json_encode(array('message' => 'Missing Required Parameters')); 
 }

@@ -33,6 +33,6 @@ if (isset($category->category))
 }
 else
 {
-    echo json_encode(array("message" => "Category Not Created"));
+    echo json_encode(array('message' => 'Missing Required Parameters'));  
 
 }
