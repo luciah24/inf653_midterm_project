@@ -19,13 +19,13 @@ $category = new Category($db);
 $data = json_decode(file_get_contents("php://input"));
 
 $category->category = isset($data->category) ? $data->category : null;
-
+                                                
 if (isset($category->category))
 {
     if ($category->create())
     { 
         //Create array 
-        $category_arr = array('id' => $category_id, 'category' => $category->category);
+        $category_arr = array('id' => $category->id, 'category' => $category->category);
 
         print_r(json_encode($category_arr));
  
