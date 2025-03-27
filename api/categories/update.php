@@ -29,8 +29,8 @@ $category->category = isset($data->category) ? $data->category : null;
 
 if ($category->update())
 {
-    // encode to JSON
-    echo json_encode(array("id" => $category->id, "category" => $category->category));
+    echo json_encode(array("message" => "Category Updated"));
+
 
 }
 else
