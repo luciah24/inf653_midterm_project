@@ -35,7 +35,7 @@ if (isset($quote->quote) && isset($quote->author_id) && isset($quote->category_i
     {
         $quote_arr = array('id' => $quote->id, 'quote' => $quote->quote, 'author_id' => $quote->author_id, 'category_id' => $quote->category_id);
 
-        print_r(json_encode($quote_arr));
+        echo json_encode($quote_arr);
 
     }
     else

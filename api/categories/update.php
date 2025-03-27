@@ -31,7 +31,8 @@ if ($category->update())
 {
     $category_arr = array('id' => $category->id, 'category' => $category->category);
 
-    print_r(json_encode($category_arr));
+    echo json_encode($category_arr);
+
 
 }
 else
