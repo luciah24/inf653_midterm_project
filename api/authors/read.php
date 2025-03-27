@@ -18,7 +18,7 @@ $result = $author->read();
 
 $num = $result->rowCount(); 
 
-// Check for any athors
+// Check for any authors
 if ($num > 0)
 {
 

@@ -17,9 +17,16 @@ $category = new Category($db);
 $data = json_decode(file_get_contents("php://input"));
 
 
+$category->id = isset($data->id) ? $data->id : null;
+
+
+
 if ($category->delete())
 {
-    echo json_encode(array("message" => "Category Deleted"));
+    $category_arr = array('id' => $category->id);
+
+    print_r(json_encode($category_arr));
+
 }
 else
 {
